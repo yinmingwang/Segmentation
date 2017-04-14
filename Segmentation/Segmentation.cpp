@@ -156,7 +156,7 @@ Mat Erosion(Mat srcimg, int size) {
 
 
 
-Mat Slicimg(Mat srcimg, Mat yimg, int cmin, int cmax) {
+Mat Slicimg(Mat srcimg, Mat yimg, Mat bimg, int cmin, int cmax) {
 	Mat threshold_output = srcimg.clone();
 	
 	vector<vector<Point> > contours;
@@ -183,8 +183,8 @@ Mat Slicimg(Mat srcimg, Mat yimg, int cmin, int cmax) {
 
 	/// 画多边形轮廓 + 包围的矩形框
 	//Mat drawing = Mat::zeros(threshold_output.size(), CV_8UC3);
-	Mat drawing = srcimg.clone();
-	Mat src = srcimg.clone();
+	Mat drawing = bimg.clone();
+	Mat src = bimg.clone();
 	Mat ydrawing = yimg.clone();
 	Mat ysrc = yimg.clone();
 	vector<Mat> roi(contours.size());
@@ -213,8 +213,8 @@ Mat Slicimg(Mat srcimg, Mat yimg, int cmin, int cmax) {
 		resize(timg, img, Size(32, 32), 0, 0, CV_INTER_LINEAR);
 		resize(ytemp, yimg, Size(32, 32), 0, 0, CV_INTER_LINEAR);
 		//imshow(str, img);
-		string path = "C:\\Users\\yinmw\\Desktop\\zp_binarybg\\" + strs + "_" + str + ".jpg";
-		string path2 = "C:\\Users\\yinmw\\Desktop\\zp_srcbg\\" + strs + "_" + str + ".jpg";
+		string path = "C:\\Users\\yinmw\\Desktop\\zt_binarybg\\" + strs + "_" + str + ".jpg";
+		string path2 = "C:\\Users\\yinmw\\Desktop\\zt_srcbg\\" + strs + "_" + str + ".jpg";
 		imwrite(path, img);
 		imwrite(path2, yimg);
 	}
@@ -224,7 +224,7 @@ Mat Slicimg(Mat srcimg, Mat yimg, int cmin, int cmax) {
 int main() {
 	char buffer[40];
 	for (r = 1; r < 20000; r++) {
-		sprintf(buffer, "C:\\Users\\yinmw\\Desktop\\picture\\%d.jpg", r);
+		sprintf(buffer, "C:\\Users\\yinmw\\Desktop\\pic\\%d.jpg", r);
 		Mat srcimage = imread(buffer);
 		Mat grayimg;
 		Mat seimg;
@@ -232,10 +232,11 @@ int main() {
 		cvtColor(srcimage, grayimg, CV_BGR2GRAY);
 		//seimg = otsu(grayimg);
 		adaptiveThreshold(grayimg, seimg, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY_INV, 17, 33);
+		Mimage = Dilation(seimg, 3);
 		///Mat s = filter(seimg, 7, 5);
 		//medianBlur(seimg, Mimage, 3);
-		Mimage = Erosion(seimg, 2);
-		Mimage = Dilation(Mimage, 2);
+		//Mimage = Erosion(seimg, 2);
+		//Mimage = Dilation(Mimage, 2);
 		//imshow("f", Mimage);
 		//
 		stringstream stream;
@@ -244,12 +245,12 @@ int main() {
 		stream >> str;
 		string filename = str + ".jpg";
 		cout << filename << endl;
-		string result = "C:\\Users\\yinmw\\Desktop\\zp\\" + filename;
+		string result = "C:\\Users\\yinmw\\Desktop\\zt\\" + filename;
 		//imshow("src", srcimage);
-		imwrite(result, Mimage);
-		Mat silimg = Slicimg(Mimage, srcimage, 17, 100);
+		imwrite(result, seimg);
+		Mat silimg = Slicimg(Mimage, srcimage, seimg, 15, 300);
 		//imshow("S", silimg);
-		//cvWaitKey(0);
+		//vWaitKey(0);
 	}
 	//fclose(fp);
 	return 0;
