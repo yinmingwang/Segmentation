@@ -69,6 +69,9 @@
   <ItemGroup>
     <ClCompile Include="Segmentation.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Segmentation.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
