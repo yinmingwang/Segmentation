@@ -166,7 +166,7 @@ Mat Segmentation::Erosion(Mat srcimg, int size) {
 	erode(srcimg, erodeimg, element);
 	return erodeimg;
 }
-void Segmentation::Slicimg(Mat srcimg, Mat yimg, Mat bimg, int cmin, int cmax) {
+Mat Segmentation::Slicimg(Mat srcimg, Mat yimg, Mat bimg, int cmin, int cmax) {
 	Mat threshold_output = srcimg.clone();
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
@@ -194,12 +194,7 @@ void Segmentation::Slicimg(Mat srcimg, Mat yimg, Mat bimg, int cmin, int cmax) {
 	vector<Mat> roi(contours.size());
 	for (int i = 0; i < contours.size(); i++)
 	{
-		/*stringstream stream, streams;
-		string str,strs;
-		stream << i;
-		streams << r;
-		stream >> str;
-		streams >> strs;*/
+		/**/
 		Scalar color = Scalar(255, 255, 255);
 		drawContours(drawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point());
 		drawContours(ydrawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point());
@@ -214,13 +209,25 @@ void Segmentation::Slicimg(Mat srcimg, Mat yimg, Mat bimg, int cmin, int cmax) {
 		resize(ytemp, yimg, Size(32, 32), 0, 0, CV_INTER_LINEAR);
 		binarySeg.push_back(img);
 		srcSeg.push_back(yimg);
-		//imshow("str", img);
+
+		stringstream stream, streams;
+		string str, strs;
+		stream << i;
+		streams << r;
+		stream >> str;
+		streams >> strs;
+		/*string path = "C:\\Users\\yinmw\\Desktop\\picbinaryseg\\" + strs + "_" + str + ".jpg";
+		string path2 = "C:\\Users\\yinmw\\Desktop\\picsrcseg\\" + strs + "_" + str + ".jpg";
+		imwrite(path, img);
+		imwrite(path2, yimg);
+		//imshow("str", img);*/
 	}
+	return drawing;
 }
 
 int main() {
 	char buffer[40];
-	for (r = 10; r < 20; r++) {
+	for (r = 1; r < 500; r++) {
 		sprintf(buffer, "C:\\Users\\yinmw\\Desktop\\picture\\%d.jpg", r);
 		Mat srcimage = imread(buffer);
 		Segmentation se(srcimage);
@@ -231,10 +238,19 @@ int main() {
 		string filename = str + ".jpg";
 		cout << filename << endl;
 		se.setBinaryImage();
-		Mat mimage = se.Erosion(se.getBinaryImage(), 2);
-		Mat teimage = se.Dilation(mimage, 2);
-		se.Slicimg(teimage, srcimage, teimage, 15, 300);
-		vector<Mat> m = se.getBinarySeg();
+		imshow("bibary", se.getBinaryImage());
+		string path = "C:\\Users\\yinmw\\Desktop\\" + filename;
+		imwrite(path, se.getBinaryImage());
+		cvWaitKey(0);
+		//Mat mimage = se.Erosion(se.getBinaryImage(), 2);
+		//Mat teimage = se.Dilation(mimage, 2);
+		//Mat tempimage = se.Dilation(teimage, 2);
+		//Mat seimage = se.Slicimg(tempimage, srcimage, teimage, 15, 400);
+		//string path = "C:\\Users\\yinmw\\Desktop\\seg\\" + filename;
+		//imwrite(path, seimage);
+		//cvWaitKey(0);
+		//imshow(filename, seimage);
+		/*vector<Mat> m = se.getBinarySeg();
 		vector<Mat>::iterator it = m.begin();
 		int k = 0;
 		cout << m.size() << endl;
@@ -245,8 +261,8 @@ int main() {
 			streams >> strs;
 			imshow(strs, *it);
 			++k;
-		}
-		cvWaitKey(0);
+		}*/
+		//cvWaitKey(0);
 		/*Mat srcimage = imread(buffer);
 		Mat grayimg;
 		Mat seimg;

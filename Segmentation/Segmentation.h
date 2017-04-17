@@ -21,7 +21,7 @@ public:
 	Mat  filter(Mat srcimage, int size, int num);
 	Mat Dilation(Mat srcimg, int size);
 	Mat Erosion(Mat srcimg, int size);
-	void Slicimg(Mat srcimg, Mat yimg, Mat bimg, int cmin, int cmax);
+	Mat Slicimg(Mat srcimg, Mat yimg, Mat bimg, int cmin, int cmax);
 	Mat paintVec3b(Mat srcimg);
 	void setBinaryImage();
 	Mat getBinaryImage();
